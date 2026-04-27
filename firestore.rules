@@ -1,0 +1,19 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Sessions: anyone can read and create
+    match /sessions/{sessionId} {
+      allow read, create, update: if true;
+      allow delete: if false; // Prevent accidental deletion
+
+      // Participants: open submission, no editing after submit
+      match /participants/{participantId} {
+        allow read, create: if true;
+        allow update: if
+          resource.data.promptSubmitted == false;
+        allow delete: if false;
+      }
+    }
+  }
+}
