@@ -20,14 +20,10 @@ npm run dev
 
 ## Environment Variables
 
-Copy `.env` to `server/.env` and fill in your keys:
-- `GEMINI_API_KEY` - Google Gemini API key
-- `GEMINI_MODEL` - Gemini model name (default: `gemini-2.5-flash`)
-- `PORT` - Backend server port (default: 3001)
-
 The frontend uses Vite env variables from `client/.env`:
 - `VITE_FIREBASE_*` - Firebase project config
-- `VITE_API_BASE_URL` - Backend URL
+- `VITE_GEMINI_API_KEY` - Google Gemini API key
+- `VITE_GEMINI_MODEL` - Gemini model name (default: `gemini-2.5-flash`)
 
 ## Firestore Security Rules
 
@@ -35,9 +31,6 @@ Use open rules during the workshop (see `firestore.rules`). Lock down after the 
 
 ## Deployment Notes
 
-Deploy this repo to Vercel as two separate projects from the same GitHub repository:
+Deploy only the `client` folder to Vercel for a client-side setup.
 
-- `client` as the frontend Vite project
-- `server` as the backend Express project
-
-Set `VITE_API_BASE_URL` in the frontend project to the deployed backend URL.
+This setup exposes the Gemini API key to the browser. Only use it if you accept that tradeoff.

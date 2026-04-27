@@ -2,6 +2,7 @@ import { useEffect, useState, useRef, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { doc, getDoc, collection, addDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../firebase/config.js';
+import { evaluatePromptWithGemini } from '../services/geminiClient.js';
 import Navbar from '../components/Navbar.jsx';
 import ParticipantForm from '../components/ParticipantForm.jsx';
 import PromptInput from '../components/PromptInput.jsx';
@@ -93,16 +94,7 @@ export default function SessionPage() {
     );
 
     try {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL || ''}/api/evaluate`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ prompt: finalPrompt }),
-        }
-      );
-      if (!res.ok) throw new Error('Evaluation failed');
-      const data = await res.json();
+      const data = await evaluatePromptWithGemini(finalPrompt);
 
       await updateDoc(doc(db, 'sessions', sessionId, 'participants', participant.id), {
         prompt: finalPrompt,
@@ -118,7 +110,7 @@ export default function SessionPage() {
       setMode(MODES.RESULT);
     } catch (err) {
       console.error(err);
-      setError('AI evaluation failed. Please try again.');
+      setError(err.message || 'AI evaluation failed. Please try again.');
       setMode(MODES.PROMPT);
     }
   };
