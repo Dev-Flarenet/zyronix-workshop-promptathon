@@ -30,19 +30,23 @@ export default function AILoadingScreen() {
   }, []);
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-10 max-w-xl mx-auto text-center">
-      <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-100 mb-6">
-        <Brain className="w-8 h-8 text-blue-600 animate-pulse" />
-      </div>
-      <h3 className="text-xl font-bold text-gray-900 mb-2">{message}</h3>
+    <div className="glass-card p-10 max-w-xl mx-auto text-center animate-slide-up relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-purple-500/10 pointer-events-none" />
+      
+      <div className="relative z-10">
+        <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-indigo-500/20 mb-6 neon-glow">
+          <Brain className="w-8 h-8 text-indigo-400 animate-pulse" />
+        </div>
+        <h3 className="text-xl font-bold text-white mb-2">{message}</h3>
 
-      <div className="w-full bg-gray-200 rounded-full h-3 mt-6 mb-2 overflow-hidden">
-        <div
-          className="bg-blue-600 h-3 rounded-full transition-all duration-300 ease-out"
-          style={{ width: `${progress}%` }}
-        />
+        <div className="w-full bg-white/10 rounded-full h-3 mt-6 mb-2 overflow-hidden">
+          <div
+            className="bg-gradient-to-r from-indigo-500 to-purple-500 h-3 rounded-full transition-all duration-300 ease-out"
+            style={{ width: `${progress}%` }}
+          />
+        </div>
+        <p className="text-sm text-gray-400 font-medium">{progress}%</p>
       </div>
-      <p className="text-sm text-gray-500 font-medium">{progress}%</p>
     </div>
   );
 }

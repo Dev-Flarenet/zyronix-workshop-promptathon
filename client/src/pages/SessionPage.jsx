@@ -126,37 +126,39 @@ export default function SessionPage() {
 
   if (!session) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <p className="text-gray-500">Loading session...</p>
+      <div className="min-h-screen relative flex items-center justify-center">
+        <div className="animated-bg" />
+        <p className="text-gray-400 animate-pulse">Loading session...</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen relative">
+      <div className="animated-bg" />
       <Navbar />
 
-      <main className="max-w-3xl mx-auto px-4 py-8">
+      <main className="max-w-3xl mx-auto px-4 py-8 relative z-10">
         <div className="flex items-center justify-between mb-6">
           <button
             onClick={() => navigate('/')}
-            className="text-sm font-medium text-gray-600 hover:text-blue-600 transition"
+            className="text-sm font-medium text-gray-400 hover:text-indigo-400 transition"
           >
             ← Back
           </button>
-          <div className="text-sm text-gray-500 truncate max-w-xs sm:max-w-md">
-            Session: <span className="font-semibold text-gray-800">{session.title}</span>
+          <div className="text-sm text-gray-400 truncate max-w-xs sm:max-w-md">
+            Session: <span className="font-semibold text-white">{session.title}</span>
           </div>
           <button
             onClick={() => navigate(`/session/${sessionId}/leaderboard`)}
-            className="text-sm font-medium text-blue-600 hover:text-blue-700 transition"
+            className="text-sm font-medium text-indigo-400 hover:text-indigo-300 transition"
           >
             Leaderboard
           </button>
         </div>
 
         {error && (
-          <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
+          <div className="mb-4 p-3 bg-red-500/10 border border-red-500/20 text-red-400 rounded-lg text-sm animate-slide-up">
             {error}
           </div>
         )}
@@ -184,13 +186,13 @@ export default function SessionPage() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
               <button
                 onClick={() => navigate(`/session/${sessionId}/leaderboard`)}
-                className="w-full sm:w-auto px-6 py-3 bg-yellow-500 hover:bg-yellow-600 text-white font-bold rounded-lg transition"
+                className="btn-secondary w-full sm:w-auto"
               >
                 View Leaderboard
               </button>
               <button
                 onClick={handleNextParticipant}
-                className="w-full sm:w-auto px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg transition"
+                className="btn-primary w-full sm:w-auto"
               >
                 Next Participant
               </button>

@@ -30,19 +30,22 @@ export default function ScoreBadge({ score }) {
   }, [score, isHighScore]);
 
   return (
-    <div className="text-center">
-      <p className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Your Score</p>
+    <div className="text-center animate-slide-up">
+      <p className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-2">Your Score</p>
       <div
-        className={`inline-flex items-center justify-center w-40 h-40 rounded-full border-4 shadow-lg ${
+        className={`inline-flex items-center justify-center w-40 h-40 rounded-full border-4 shadow-2xl relative overflow-hidden ${
           isHighScore
-            ? 'bg-yellow-50 border-yellow-400 text-yellow-700 shadow-yellow-200'
-            : 'bg-blue-50 border-blue-400 text-blue-700 shadow-blue-200'
+            ? 'bg-yellow-500/10 border-yellow-400 text-yellow-400 shadow-yellow-500/20 neon-glow'
+            : 'bg-indigo-500/10 border-indigo-400 text-indigo-400 shadow-indigo-500/20'
         }`}
       >
-        <span className="text-5xl font-extrabold">{display}</span>
+        <div className={`absolute inset-0 bg-gradient-to-br ${
+          isHighScore ? 'from-yellow-500/20 to-orange-500/10' : 'from-indigo-500/20 to-purple-500/10'
+        }`} />
+        <span className="relative z-10 text-5xl font-extrabold">{display}</span>
       </div>
-      <p className="text-lg font-semibold text-gray-700 mt-2">/ 100</p>
-      {isHighScore && <p className="text-yellow-600 font-bold mt-1">Amazing!</p>}
+      <p className="text-lg font-semibold text-gray-300 mt-2">/ 100</p>
+      {isHighScore && <p className="text-yellow-400 font-bold mt-1 animate-pulse-glow">Amazing!</p>}
     </div>
   );
 }
