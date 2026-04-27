@@ -2,8 +2,8 @@
   "name": "zyronix-workshop",
   "private": true,
   "version": "1.0.0",
-  "workspaces": [
-    "client",
-    "server"
-  ]
+  "scripts": {
+    "dev": "npm run dev --prefix client",
+    "build": "npm run build --prefix client"
+  }
 }
