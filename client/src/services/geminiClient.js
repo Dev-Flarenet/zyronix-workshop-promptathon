@@ -1,7 +1,38 @@
 import { GoogleGenAI } from '@google/genai';
 
-const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
-const GEMINI_MODEL = import.meta.env.VITE_GEMINI_MODEL || 'gemini-2.5-flash';
+const LOCAL_GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
+const LOCAL_GEMINI_MODEL = import.meta.env.VITE_GEMINI_MODEL || 'gemini-2.5-flash';
+
+let runtimeConfigPromise;
+
+async function getRuntimeConfig() {
+  if (LOCAL_GEMINI_API_KEY) {
+    return {
+      geminiApiKey: LOCAL_GEMINI_API_KEY,
+      geminiModel: LOCAL_GEMINI_MODEL,
+    };
+  }
+
+  if (!runtimeConfigPromise) {
+    runtimeConfigPromise = fetch('/api/runtime-config', {
+      headers: { Accept: 'application/json' },
+    }).then(async (response) => {
+      const payload = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(payload.error || 'Failed to load Gemini runtime config');
+      }
+
+      if (!payload.geminiApiKey) {
+        throw new Error('Missing GEMINI_API_KEY in Vercel environment');
+      }
+
+      return payload;
+    });
+  }
+
+  return runtimeConfigPromise;
+}
 
 function parseEvaluation(rawText) {
   const cleanText = String(rawText || '')
@@ -24,11 +55,9 @@ function parseEvaluation(rawText) {
 }
 
 export async function evaluatePromptWithGemini(prompt) {
-  if (!GEMINI_API_KEY) {
-    throw new Error('Missing VITE_GEMINI_API_KEY in client environment');
-  }
+  const { geminiApiKey, geminiModel } = await getRuntimeConfig();
 
-  const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
+  const ai = new GoogleGenAI({ apiKey: geminiApiKey });
 
   const systemPrompt = `You are an expert AI Prompt Evaluator for a school AI workshop.
 
@@ -58,7 +87,7 @@ Scoring Criteria (each out of 10, x2.5 = 25pts each):
 Be warm and encouraging. These are school students writing prompts for the first time.`;
 
   const response = await ai.models.generateContent({
-    model: GEMINI_MODEL,
+    model: geminiModel,
     contents: systemPrompt,
   });
 
